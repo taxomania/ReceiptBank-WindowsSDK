@@ -45,33 +45,7 @@ namespace Taxomania.ReceiptBank.Web
                             Content = content
                         }))
                 .SelectMany(async request => await _httpClient.SendRequestAsync(request))
-                .SelectMany(async response => await Observable.Create<ReceiptBankReceipt>(async observer =>
-                {
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        if (response.Content != null)
-                        {
-                            var error = JsonConvert.DeserializeObject<ReceiptBankError>(
-                                await response.Content.ReadAsStringAsync());
-                            observer.OnError(new ReceiptBankException
-                            {
-                                StatusCode = response.StatusCode,
-                                Error = error
-                            });
-                        }
-                        else
-                        {
-                            observer.OnError(new ArgumentException(response.StatusCode.ToString()));
-                        }
-                    }
-                    else
-                    {
-                        observer.OnNext(
-                            JsonConvert.DeserializeObject<ReceiptBankReceipt>(await response.Content.ReadAsStringAsync()));
-                        observer.OnCompleted();
-                    }
-                    return Disposable.Empty;
-                }));
+                .SelectMany(ParseResponseObservable<ReceiptBankReceipt>);
         }
 
         public IObservable<IEnumerable<ReceiptBankReceiptStatus>> GetReceiptsStatus(IEnumerable<long> receiptIds)
@@ -92,35 +66,67 @@ namespace Taxomania.ReceiptBank.Web
                     Content = new HttpStringContent(content, UnicodeEncoding.Utf8, "application/json")
                 })
                 .SelectMany(async request => await _httpClient.SendRequestAsync(request))
-                .SelectMany(
-                    async response => await Observable.Create<IEnumerable<ReceiptBankReceiptStatus>>(async observer =>
+                .SelectMany(ParseResponseObservable<IEnumerable<ReceiptBankReceiptStatus>>);
+        }
+
+        public IObservable<ReceiptBankReceipts> GetReceipts(long? receiptId = null, bool? newOnly = null)
+        {
+            return Observable.Return(new RBGetReceipts
+            {
+                ReceiptId = receiptId,
+                New = newOnly
+            })
+                .Select(fetch =>
+                {
+                    var settings = new JsonSerializerSettings
                     {
-                        if (!response.IsSuccessStatusCode)
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    return JsonConvert.SerializeObject(fetch, settings);
+                })
+                .Select(content => new HttpRequestMessage(HttpMethod.Post, new Uri(BaseUrl + "/receipts"))
+                {
+                    Content = new HttpStringContent(content, UnicodeEncoding.Utf8, "application/json")
+                })
+                .SelectMany(async request => await _httpClient.SendRequestAsync(request))
+                .SelectMany(ParseResponseObservable<ReceiptBankReceipts>);
+        }
+
+        private static IObservable<T> ParseResponseObservable<T>(HttpResponseMessage response)
+        {
+            return Observable.Create<T>(async observer =>
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.Content != null)
+                    {
+                        var error = JsonConvert.DeserializeObject<ReceiptBankError>(
+                            await response.Content.ReadAsStringAsync());
+                        observer.OnError(new ReceiptBankException
                         {
-                            if (response.Content != null)
-                            {
-                                var error = JsonConvert.DeserializeObject<ReceiptBankError>(
-                                    await response.Content.ReadAsStringAsync());
-                                observer.OnError(new ReceiptBankException
-                                {
-                                    StatusCode = response.StatusCode,
-                                    Error = error
-                                });
-                            }
-                            else
-                            {
-                                observer.OnError(new ArgumentException(response.StatusCode.ToString()));
-                            }
-                        }
-                        else
-                        {
-                            observer.OnNext(
-                                JsonConvert.DeserializeObject<IEnumerable<ReceiptBankReceiptStatus>>(
-                                    await response.Content.ReadAsStringAsync()));
-                            observer.OnCompleted();
-                        }
-                        return Disposable.Empty;
-                    }));
+                            StatusCode = response.StatusCode,
+                            Error = error
+                        });
+                    }
+                    else
+                    {
+                        observer.OnError(new ArgumentException(response.StatusCode.ToString()));
+                    }
+                }
+                else
+                {
+                    var settings = new JsonSerializerSettings
+                    {
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    observer.OnNext(
+                        JsonConvert.DeserializeObject<T>(
+                            await response.Content.ReadAsStringAsync(), settings));
+                    observer.OnCompleted();
+                }
+                return Disposable.Empty;
+            });
         }
     }
 }

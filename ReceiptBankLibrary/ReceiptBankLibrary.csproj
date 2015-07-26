@@ -110,10 +110,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Model\OAuthToken.cs" />
+    <Compile Include="Model\RBGetReceipts.cs" />
     <Compile Include="Model\ReceiptBankError.cs" />
     <Compile Include="Model\ReceiptBankException.cs" />
     <Compile Include="Model\RBGetReceiptsStatus.cs" />
     <Compile Include="Model\RBReceiptId.cs" />
+    <Compile Include="Model\ReceiptBankDetailedReceipt.cs" />
+    <Compile Include="Model\ReceiptBankReceipts.cs" />
     <Compile Include="Model\ReceiptBankReceiptStatus.cs" />
     <Compile Include="Model\ReceiptBankReceipt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
