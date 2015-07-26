@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace Taxomania.ReceiptBank.Model
 {
     [DataContract]
-    internal sealed class ReceiptBankGetReceipts
+    internal sealed class RBGetReceiptsStatus
     {
         [DataMember(Name = "receipts")]
-        public IEnumerable<long> ReceiptIds { get; set; }
+        public IEnumerable<RBReceiptId> ReceiptIds { get; set; }
     }
 }

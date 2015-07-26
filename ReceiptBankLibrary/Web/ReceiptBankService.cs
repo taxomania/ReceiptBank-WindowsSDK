@@ -76,7 +76,17 @@ namespace Taxomania.ReceiptBank.Web
 
         public IObservable<IEnumerable<ReceiptBankReceiptStatus>> GetReceiptsStatus(IEnumerable<long> receiptIds)
         {
-            return Observable.Return(JsonConvert.SerializeObject(new ReceiptBankGetReceipts {ReceiptIds = receiptIds}))
+            return Observable.Create<RBReceiptId>(observer =>
+            {
+                foreach (var receiptId in receiptIds)
+                {
+                    observer.OnNext(new RBReceiptId {ReceiptId = receiptId});
+                }
+                observer.OnCompleted();
+                return Disposable.Empty;
+            })
+                .ToList()
+                .Select(ids => JsonConvert.SerializeObject(new RBGetReceiptsStatus {ReceiptIds = ids}))
                 .Select(content => new HttpRequestMessage(HttpMethod.Post, new Uri(BaseUrl + "/getReceiptsStatus"))
                 {
                     Content = new HttpStringContent(content, UnicodeEncoding.Utf8, "application/json")
