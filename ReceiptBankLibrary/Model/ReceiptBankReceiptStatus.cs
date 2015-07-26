@@ -3,12 +3,15 @@
 namespace Taxomania.ReceiptBank.Model
 {
     [DataContract]
-    public sealed class ReceiptBankReceipt
+    public sealed class ReceiptBankReceiptStatus
     {
-        [DataMember(Name = "receiptid")]
+        [DataMember(Name = "id")]
         public long ReceiptId { get; set; }
 
         [DataMember(Name = "status")]
         public string Status { get; set; }
+
+        [DataMember(Name = "processed")]
+        public bool Processed { get; set; }
     }
 }

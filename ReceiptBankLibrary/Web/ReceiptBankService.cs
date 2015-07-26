@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 using Windows.Web.Http.Headers;
@@ -46,7 +47,6 @@ namespace Taxomania.ReceiptBank.Web
                 .SelectMany(async request => await _httpClient.SendRequestAsync(request))
                 .SelectMany(async response => await Observable.Create<ReceiptBankReceipt>(async observer =>
                 {
-                    Debug.WriteLine(await response.Content.ReadAsStringAsync());
                     if (!response.IsSuccessStatusCode)
                     {
                         if (response.Content != null)
@@ -72,6 +72,45 @@ namespace Taxomania.ReceiptBank.Web
                     }
                     return Disposable.Empty;
                 }));
+        }
+
+        public IObservable<IEnumerable<ReceiptBankReceiptStatus>> GetReceiptsStatus(IEnumerable<long> receiptIds)
+        {
+            return Observable.Return(JsonConvert.SerializeObject(new ReceiptBankGetReceipts {ReceiptIds = receiptIds}))
+                .Select(content => new HttpRequestMessage(HttpMethod.Post, new Uri(BaseUrl + "/getReceiptsStatus"))
+                {
+                    Content = new HttpStringContent(content, UnicodeEncoding.Utf8, "application/json")
+                })
+                .SelectMany(async request => await _httpClient.SendRequestAsync(request))
+                .SelectMany(
+                    async response => await Observable.Create<IEnumerable<ReceiptBankReceiptStatus>>(async observer =>
+                    {
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            if (response.Content != null)
+                            {
+                                var error = JsonConvert.DeserializeObject<ReceiptBankError>(
+                                    await response.Content.ReadAsStringAsync());
+                                observer.OnError(new ReceiptBankException
+                                {
+                                    StatusCode = response.StatusCode,
+                                    Error = error
+                                });
+                            }
+                            else
+                            {
+                                observer.OnError(new ArgumentException(response.StatusCode.ToString()));
+                            }
+                        }
+                        else
+                        {
+                            observer.OnNext(
+                                JsonConvert.DeserializeObject<IEnumerable<ReceiptBankReceiptStatus>>(
+                                    await response.Content.ReadAsStringAsync()));
+                            observer.OnCompleted();
+                        }
+                        return Disposable.Empty;
+                    }));
         }
     }
 }

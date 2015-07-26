@@ -112,6 +112,8 @@
     <Compile Include="Model\OAuthToken.cs" />
     <Compile Include="Model\ReceiptBankError.cs" />
     <Compile Include="Model\ReceiptBankException.cs" />
+    <Compile Include="Model\ReceiptBankGetReceipts.cs" />
+    <Compile Include="Model\ReceiptBankReceiptStatus.cs" />
     <Compile Include="Model\ReceiptBankReceipt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ImageUtils.cs" />
