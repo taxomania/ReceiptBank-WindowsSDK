@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Receipt Bank Windows SDK")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Receipt Bank Windows 10 SDK")]
+[assembly: AssemblyDescription("Simple Windows 10 SDK for Receipt Bank API")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Taxomania")]
 [assembly: AssemblyProduct("ReceiptBankSDK")]
