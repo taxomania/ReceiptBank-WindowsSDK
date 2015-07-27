@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiptBank", "ReceiptBank\ReceiptBank.csproj", "{76567A15-F521-47C1-A8AD-3861FFD0AF0B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiptBankLibrary", "ReceiptBankLibrary\ReceiptBankLibrary.csproj", "{6CEA0F31-2A4F-43C4-9F99-9015FED2100A}"
 EndProject
 Global
@@ -19,26 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|ARM.ActiveCfg = Debug|ARM
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|ARM.Build.0 = Debug|ARM
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|ARM.Deploy.0 = Debug|ARM
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|x64.ActiveCfg = Debug|x64
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|x64.Build.0 = Debug|x64
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|x64.Deploy.0 = Debug|x64
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|x86.ActiveCfg = Debug|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|x86.Build.0 = Debug|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Debug|x86.Deploy.0 = Debug|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|Any CPU.ActiveCfg = Release|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|ARM.ActiveCfg = Release|ARM
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|ARM.Build.0 = Release|ARM
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|ARM.Deploy.0 = Release|ARM
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|x64.ActiveCfg = Release|x64
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|x64.Build.0 = Release|x64
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|x64.Deploy.0 = Release|x64
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|x86.ActiveCfg = Release|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|x86.Build.0 = Release|x86
-		{76567A15-F521-47C1-A8AD-3861FFD0AF0B}.Release|x86.Deploy.0 = Release|x86
 		{6CEA0F31-2A4F-43C4-9F99-9015FED2100A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6CEA0F31-2A4F-43C4-9F99-9015FED2100A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CEA0F31-2A4F-43C4-9F99-9015FED2100A}.Debug|ARM.ActiveCfg = Debug|ARM

@@ -12,7 +12,7 @@ namespace Taxomania.ReceiptBank.Web
         private const string OauthEndpoint = "https://api.receipt-bank.com/oauth";
         private const string OauthSandboxEndpoint = "https://app.rb-logistics.com/oauth";
 
-        public static Uri GetOAuthCodeUri(string clientId, string redirectUri, bool sandbox=false)
+        public static Uri GetOAuthCodeUri(string clientId, string redirectUri, bool sandbox = false)
         {
             var endpoint = (sandbox) ? OauthSandboxEndpoint : OauthEndpoint;
             return new Uri($"{endpoint}/authorize?response_type=code&client_id={clientId}&redirect_uri={redirectUri}",
