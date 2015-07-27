@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Windows.Storage;
@@ -21,8 +22,8 @@ namespace Taxomania.ReceiptBank.Web
 
         public ReceiptBankService(OAuthToken oAuthToken)
         {
-            if (oAuthToken.Expires != null) // TODO Check expiry
-                throw new ArgumentException("Access token has expired, please refresh");
+           // if (oAuthToken.Expires != null) // TODO Check expiry
+             //   throw new ArgumentException("Access token has expired, please refresh");
             _httpClient = new HttpClient(new HttpBaseProtocolFilter {AllowUI = false});
             _httpClient.DefaultRequestHeaders.Authorization = new HttpCredentialsHeaderValue("Bearer",
                 oAuthToken.AccessToken);
@@ -35,7 +36,7 @@ namespace Taxomania.ReceiptBank.Web
             return Observable.Return(new HttpMultipartFormDataContent())
                 .SelectMany(async content =>
                 {
-                    content.Add(new HttpStreamContent(await imageFile.OpenAsync(FileAccessMode.Read)), "photo");
+                    content.Add(new HttpStreamContent(await imageFile.OpenAsync(FileAccessMode.Read)), "photo", imageFile.Name);
                     return content;
                 })
                 .SelectMany(
@@ -101,13 +102,21 @@ namespace Taxomania.ReceiptBank.Web
                 {
                     if (response.Content != null)
                     {
-                        var error = JsonConvert.DeserializeObject<ReceiptBankError>(
-                            await response.Content.ReadAsStringAsync());
-                        observer.OnError(new ReceiptBankException
+                        var contentType = response.Content.Headers.ContentType.MediaType;
+                        if ("application/json".Equals(contentType))
                         {
-                            StatusCode = response.StatusCode,
-                            Error = error
-                        });
+                            var error = JsonConvert.DeserializeObject<ReceiptBankError>(
+                                await response.Content.ReadAsStringAsync());
+                            observer.OnError(new ReceiptBankException
+                            {
+                                StatusCode = response.StatusCode,
+                                Error = error
+                            });
+                        }
+                        else
+                        {
+                            observer.OnError(new Exception(await response.Content.ReadAsStringAsync()));
+                        }
                     }
                     else
                     {
