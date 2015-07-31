@@ -1,0 +1,38 @@
+﻿{
+    "authors": [ "Tariq Patel" ],
+    "owners": [ "taxomania" ],
+    "version": "1.0.0-beta2",
+    "title": "Receipt Bank Windows 10 SDK",
+    "description": "A simple Windows 10 SDK for the Receipt Bank API",
+    "licenseUrl": "https://github.com/taxomania/ReceiptBank-WindowsSDK/blob/master/LICENSE",
+    "projectUrl": "https://github.com/taxomania/ReceiptBank-WindowsSDK",
+    "repository": { "type": "git" },
+    "requireLicenseAcceptance": false,
+    "copyright": "Copyright Taxomania 2015",
+    "tags": ["ReceiptBank", "expenses"],
+  
+    "dependencies": {
+        "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+        "Newtonsoft.Json": "7.0.1",
+        "Rx-Core": "2.3.0-beta2",
+        "Rx-Interfaces": "2.3.0-beta2",
+        "Rx-Linq": "2.3.0-beta2",
+        "Rx-Main": "2.3.0-beta2",
+        "Rx-PlatformServices": "2.3.0-beta2",
+        "System.Numerics.Vectors": "4.1.0"
+    },
+
+    "frameworks": {
+        "uap10.0": { },
+        "netcore5": { }
+    },
+    
+    "runtimes": {
+        "win10-arm": { },
+        "win10-arm-aot": { },
+        "win10-x86": { },
+        "win10-x86-aot": { },
+        "win10-x64": { },
+        "win10-x64-aot": { }
+    }
+}
