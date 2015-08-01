@@ -28,14 +28,15 @@ namespace Taxomania.ReceiptBank.Util
             return await picker.PickSingleFileAsync();
         }
 
-        public static async Task<IStorageFile> CreateBitmapFromElement(FrameworkElement uielement)
+        // If showPicker == false => PicturesLibrary capability must be set in client app
+        public static async Task<IStorageFile> CreateBitmapFromElement(FrameworkElement uielement, bool showPicker = true, string filename = "receipt" + DateTime.UtcNow.ToFileTimeUtc() + ".jpg")
         {
             try
             {
                 var renderTargetBitmap = new RenderTargetBitmap();
                 await renderTargetBitmap.RenderAsync(uielement);
 
-                var file = await SaveFile();
+                var file = await SaveFile(showPicker, filename);
                 var pixelBuffer = await renderTargetBitmap.GetPixelsAsync();
                 using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
@@ -61,8 +62,13 @@ namespace Taxomania.ReceiptBank.Util
             }
         }
 
-        private static async Task<IStorageFile> SaveFile()
+        private static async Task<IStorageFile> SaveFile(bool showPicker = true, string filename = "receipt" + DateTime.UtcNow.ToFileTimeUtc() + ".jpg")
         {
+            if (!showPicker)
+            {
+                return await KnownFolders.PicturesLibrary.CreateFileAsync(fileName,
+                    CreationCollisionOption.GenerateUniqueName); // this way it is not in app data
+            }
             var savePicker = new FileSavePicker {SuggestedStartLocation = PickerLocationId.PicturesLibrary};
             savePicker.FileTypeChoices.Add("Images", new List<string> {".jpg", ".jpeg"});
             savePicker.SuggestedFileName = "receipt" + DateTime.UtcNow;
