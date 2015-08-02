@@ -7,7 +7,7 @@ namespace Taxomania.ReceiptBank.Model
     public sealed class ReceiptBankError
     {
         [DataMember(Name = "errorcode")]
-        public string Code { get; set; }
+        public int Code { get; set; }
 
         [DataMember(Name = "errormessage")]
         public string Message { get; set; }
