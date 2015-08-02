@@ -23,7 +23,14 @@ namespace Taxomania.ReceiptBank.Web
         {
             // if (oAuthToken.Expires != null) // TODO Check expiry
             //   throw new ArgumentException("Access token has expired, please refresh");
-            _httpClient = new HttpClient(new HttpBaseProtocolFilter {AllowUI = false});
+
+            var rootFilter = new HttpBaseProtocolFilter
+            {
+                AllowUI = false
+            };
+            rootFilter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
+            rootFilter.CacheControl.WriteBehavior = HttpCacheWriteBehavior.NoCache;
+            _httpClient = new HttpClient(rootFilter);
             _httpClient.DefaultRequestHeaders.Authorization = new HttpCredentialsHeaderValue("Bearer",
                 oAuthToken.AccessToken);
         }
