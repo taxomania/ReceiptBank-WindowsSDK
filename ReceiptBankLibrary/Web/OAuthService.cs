@@ -19,7 +19,7 @@ namespace Taxomania.ReceiptBank.Web
                 UriKind.Absolute);
         }
 
-        public static bool TryGetAccessCodeFromUri(Uri uri, string redirectUri, out string accessCode)
+        public static bool TryGetAccessCodeFromUri(Uri uri, string redirectUri, out string accessCode, out string error)
         {
             var callbackUri = string.Format($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}");
             if (callbackUri.Equals(redirectUri))
@@ -29,10 +29,19 @@ namespace Taxomania.ReceiptBank.Web
                 {
                     accessCode =
                         queryParam.Substring(queryParam.IndexOf("code=", StringComparison.Ordinal) + "code=".Length);
+                    error = null;
                     return true;
+                }
+                foreach (var queryParam in queryParams.Where(queryParam => queryParam.StartsWith("error=")))
+                {
+                    error =
+                        queryParam.Substring(queryParam.IndexOf("error=", StringComparison.Ordinal) + "error=".Length);
+                    accessCode = null;
+                    return false;
                 }
             }
             accessCode = null;
+            error = null;
             return false;
         }
 
