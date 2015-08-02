@@ -14,7 +14,7 @@ namespace Taxomania.ReceiptBank.Model
         public string Type { get; set; }
 
         [DataMember(Name = "date")]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         [DataMember(Name = "invoice_number")]
         public string InvoiceNumber { get; set; }
