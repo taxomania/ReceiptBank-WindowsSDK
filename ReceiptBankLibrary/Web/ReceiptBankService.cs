@@ -125,14 +125,27 @@ namespace Taxomania.ReceiptBank.Web
                 }
                 else
                 {
-                    var settings = new JsonSerializerSettings
+                    var content = await response.Content.ReadAsStringAsync();
+                    var error = JsonConvert.DeserializeObject<ReceiptBankError>(content);
+                    if (error != null)
                     {
-                        MissingMemberHandling = MissingMemberHandling.Ignore
-                    };
-                    observer.OnNext(
-                        JsonConvert.DeserializeObject<T>(
-                            await response.Content.ReadAsStringAsync(), settings));
-                    observer.OnCompleted();
+                        observer.OnError(new ReceiptBankException
+                        {
+                            StatusCode = response.StatusCode,
+                            Error = error
+                        });
+                    }
+                    else
+                    {
+
+                        var settings = new JsonSerializerSettings
+                        {
+                            MissingMemberHandling = MissingMemberHandling.Ignore
+                        };
+                        observer.OnNext(
+                            JsonConvert.DeserializeObject<T>(content, settings));
+                        observer.OnCompleted();
+                    }
                 }
                 return Disposable.Empty;
             });
