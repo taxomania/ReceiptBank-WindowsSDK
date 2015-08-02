@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Taxomania.ReceiptBank.Model
 {
     [DataContract]
-    public sealed class ReceiptBankDetailedReceipt
+    public class ReceiptBankDetailedReceipt
     {
         [DataMember(Name = "id")]
         public long ReceiptId { get; set; }
@@ -17,6 +18,9 @@ namespace Taxomania.ReceiptBank.Model
 
         [DataMember(Name = "invoice_number")]
         public string InvoiceNumber { get; set; }
+
+        [DataMember(Name = "due_date")]
+        public DateTime? DueDate { get; set; }
 
         [DataMember(Name = "paid")]
         public bool Paid { get; set; }
@@ -71,5 +75,10 @@ namespace Taxomania.ReceiptBank.Model
 
         [DataMember(Name = "status")]
         public string Status { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

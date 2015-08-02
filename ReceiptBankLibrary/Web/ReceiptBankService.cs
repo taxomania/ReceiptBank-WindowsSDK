@@ -77,7 +77,8 @@ namespace Taxomania.ReceiptBank.Web
                 .SelectMany(ParseResponseObservable<IEnumerable<ReceiptBankReceiptStatus>>);
         }
 
-        public IObservable<ReceiptBankReceipts> GetReceipts(long? receiptId = null, bool? newOnly = null)
+        public IObservable<ReceiptBankReceipts<ReceiptBankDetailedReceipt>> GetReceipts(long? receiptId = null,
+            bool? newOnly = null)
         {
             return Observable.Return(new RBGetReceipts
             {
@@ -98,7 +99,14 @@ namespace Taxomania.ReceiptBank.Web
                     Content = new HttpStringContent(content, UnicodeEncoding.Utf8, "application/json")
                 })
                 .SelectMany(async request => await _httpClient.SendRequestAsync(request))
-                .SelectMany(ParseResponseObservable<ReceiptBankReceipts>);
+                .SelectMany(ParseResponseObservable<ReceiptBankReceipts<ReceiptBankDetailedReceipt>>);
+        }
+
+        public IObservable<ReceiptBankReceipts<ReceiptBankDetailedInboxReceipt>> GetInboxReceipts()
+        {
+            return Observable.Return(new HttpRequestMessage(HttpMethod.Post, new Uri(BaseUrl + "/inbox")))
+                .SelectMany(async request => await _httpClient.SendRequestAsync(request))
+                .SelectMany(ParseResponseObservable<ReceiptBankReceipts<ReceiptBankDetailedInboxReceipt>>);
         }
 
         private static IObservable<T> ParseResponseObservable<T>(HttpResponseMessage response)
