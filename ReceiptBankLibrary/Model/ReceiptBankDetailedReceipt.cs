@@ -25,7 +25,7 @@ namespace Taxomania.ReceiptBank.Model
         public string Payee { get; set; }
 
         [DataMember(Name = "payee_id")]
-        public long? PayeeId { get; set; }
+        public string PayeeId { get; set; }
 
         [DataMember(Name = "client")]
         public string Client { get; set; }
@@ -37,10 +37,10 @@ namespace Taxomania.ReceiptBank.Model
         public string Category { get; set; }
 
         [DataMember(Name = "category_id")]
-        public long CategoryId { get; set; }
+        public string CategoryId { get; set; }
 
         [DataMember(Name = "category_code")]
-        public long CategoryCode { get; set; }
+        public long? CategoryCode { get; set; }
 
         [DataMember(Name = "currency")]
         public string Currency { get; set; }

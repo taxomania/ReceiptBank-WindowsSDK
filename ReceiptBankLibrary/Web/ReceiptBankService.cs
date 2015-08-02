@@ -126,24 +126,26 @@ namespace Taxomania.ReceiptBank.Web
                 else
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ReceiptBankError>(content);
-                    if (error != null)
+                    try
                     {
+                        var error = JsonConvert.DeserializeObject<ReceiptBankError>(content,
+                            new JsonSerializerSettings
+                            {
+                                MissingMemberHandling = MissingMemberHandling.Error
+                            });
                         observer.OnError(new ReceiptBankException
                         {
                             StatusCode = response.StatusCode,
                             Error = error
                         });
                     }
-                    else
+                    catch (JsonSerializationException)
                     {
-
-                        var settings = new JsonSerializerSettings
-                        {
-                            MissingMemberHandling = MissingMemberHandling.Ignore
-                        };
                         observer.OnNext(
-                            JsonConvert.DeserializeObject<T>(content, settings));
+                            JsonConvert.DeserializeObject<T>(content, new JsonSerializerSettings
+                            {
+                                MissingMemberHandling = MissingMemberHandling.Ignore
+                            }));
                         observer.OnCompleted();
                     }
                 }
